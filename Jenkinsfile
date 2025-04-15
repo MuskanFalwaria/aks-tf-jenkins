@@ -21,7 +21,7 @@ pipeline {
 
         stage('Build .NET App') {
             steps {
-                bat 'dotnet publish WebApiJenkins/WebApiJenkins.csproj -c Release -o out'
+                bat 'dotnet publish ApiContainer/ApiContainer.csproj -c Release -o out'
             }
         }
 
@@ -89,7 +89,7 @@ pipeline {
 
         stage('Deploy to AKS') {
             steps {
-                bat "kubectl apply -f WebApiJenkins/test.yaml"
+                bat "kubectl apply -f WebApiJenkins/deployment.yaml"
             }
         }
     }
