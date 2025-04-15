@@ -138,11 +138,18 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                bat "docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile ."
-            }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         bat "docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile ."
+        //     }
+        // }
+
+        stages {
+    stage('Build Docker Image') {
+        steps {
+            bat 'docker build --pull --progress=plain -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile .'
         }
+    }
 
         stage('Terraform Init') {
             steps {
