@@ -11,8 +11,8 @@ pipeline {
         stage('Terraform Init & Apply') {
             steps {
                 dir('terraform') {
-                    sh 'terraform init'
-                    sh 'terraform apply -auto-approve'
+                    bat 'terraform init'
+                    bat 'terraform apply -auto-approve'
                 }
             }
         }
@@ -28,8 +28,8 @@ pipeline {
         stage('Push Docker Image to ACR') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'acr-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh 'docker login ${ACR_NAME}.azurecr.io -u $USERNAME -p $PASSWORD'
-                    sh 'docker push ${ACR_NAME}.azurecr.io/${IMAGE_NAME}'
+                    bat 'docker login ${ACR_NAME}.azurecr.io -u $USERNAME -p $PASSWORD'
+                    bat 'docker push ${ACR_NAME}.azurecr.io/${IMAGE_NAME}'
                 }
             }
         }
@@ -37,8 +37,8 @@ pipeline {
         stage('Deploy to AKS') {
             steps {
                 script {
-                    sh 'az aks get-credentials --resource-group $RESOURCE_GROUP --name myAKSCluster'
-                    sh 'kubectl apply -f deployment.yaml'
+                    bat 'az aks get-credentials --resource-group $RESOURCE_GROUP --name myAKSCluster'
+                    bat 'kubectl apply -f deployment.yaml'
                 }
             }
         }
