@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mywebapi-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mywebapi
+  template:
+    metadata:
+      labels:
+        app: mywebapi
+    spec:
+      containers:
+      - name: mywebapi
+        image: <ACR_NAME>.azurecr.io/mywebapi:latest
+        ports:
+        - containerPort: 8080  # changed from 80 to 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mywebapi-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: mywebapi
+  ports:
+  - protocol: TCP
+    port: 80            # Public port
+    targetPort: 8080    # Port inside the container

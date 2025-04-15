@@ -1,0 +1,56 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Logs
+logs/
+*.log
+
+# VS Code
+.vscode/
+
+# Visual Studio
+.vs/
+*.dbmdl
+
+# Docker
+**/Dockerfile.*
+docker-compose.*
+.dockerignore
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+# Kubernetes
+*.yaml~
+
+# Jenkins
+*.jenkinsfile~
+pipeline.log
+
+# Secrets
+secrets.tfvars
+*.pem
+*.key
+*.crt
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Node (if you have frontend)
+node_modules/
+

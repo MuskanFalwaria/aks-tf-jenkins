@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "MbIsCDLnPggLfk7Q7KGKpZvr1JqUMkxIEDaOiLpk9wY=",
+  "Source": "ApiContainer",
+  "BasePath": "_content/ApiContainer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
