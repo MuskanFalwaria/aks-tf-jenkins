@@ -27,9 +27,10 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile ApiContainer"
+                bat "docker build -t myacrnamemuskan.azurecr.io/mywebapi:latest -f ApiContainer/Dockerfile ."
             }
         }
+
 
        stage('Terraform Init') {
             steps {
