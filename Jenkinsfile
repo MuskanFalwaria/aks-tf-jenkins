@@ -151,6 +151,8 @@ pipeline {
         }
     }
 
+        }
+
         stage('Terraform Init') {
             steps {
                 bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% init'
