@@ -19,6 +19,12 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/MuskanFalwaria/aks-tf-jenkins.git'
             }
         }
+        stage('Clean Workspace') {
+    steps {
+        cleanWs()
+    }
+}
+
 
         stage('Build .NET Web API') {
             steps {
