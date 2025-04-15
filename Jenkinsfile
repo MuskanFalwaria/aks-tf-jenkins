@@ -14,18 +14,16 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/MuskanFalwaria/aks-tf-jenkins.git'
-            }
-        }
         stage('Clean Workspace') {
     steps {
         cleanWs()
     }
 }
-
-
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/MuskanFalwaria/aks-tf-jenkins.git'
+            }
+        }
         stage('Build .NET Web API') {
             steps {
                 bat 'dotnet publish ApiContainer/ApiContainer.csproj -c Release -o out'
