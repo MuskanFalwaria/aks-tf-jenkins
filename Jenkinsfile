@@ -150,8 +150,7 @@ pipeline {
             bat 'docker build --pull --progress=plain -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile .'
         }
     }
-
-        }
+}
 
         stage('Terraform Init') {
             steps {
