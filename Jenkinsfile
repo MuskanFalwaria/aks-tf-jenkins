@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         ACR_NAME = 'myacrnamemuskan'
-        AZURE_CREDENTIALS_ID = 'jenkins-pipeline-sp'
+        AZURE_CREDENTIALS_ID = 'azure-service-principal-1'
         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"
         IMAGE_NAME = 'mywebapi'
         IMAGE_TAG = 'latest'
