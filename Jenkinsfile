@@ -116,7 +116,7 @@ pipeline {
 
         stage('Deploy to AKS') {
             steps {
-                bat 'kubectl apply -f ApiContainer/deployment.yaml'
+                bat 'kubectl apply -f deployment.yaml'
             }
         }
     }
