@@ -1,166 +1,166 @@
-pipeline {
-    agent any
-
-    environment {
-        ACR_NAME = "myacrnamemuskan"
-        IMAGE_NAME = "mywebapi"
-        RESOURCE_GROUP = "myResourceGroup"
-        CLUSTER_NAME = "myAKSCluster"
-    }
-
-    stages {
-        stage('Terraform - Provision Infrastructure') {
-            steps {
-                dir('terraform') {
-                    bat 'terraform init'
-                    bat 'terraform apply -auto-approve'
-                }
-            }
-        }
-
-        stage('Login to ACR') {
-            steps {
-                bat """
-                echo Logging in to ACR: %ACR_NAME%
-                az acr login --name %ACR_NAME%
-                """
-            }
-        }
-
-        stage('Docker Build & Push') {
-        steps {
-            script {
-                def acrLoginServer = "${env.ACR_NAME}.azurecr.io"
-                bat """
-                echo Building Docker Image...
-                docker build -t %IMAGE_NAME% -f mywebapi/Dockerfile .
-
-                echo Tagging Image...
-                docker tag %IMAGE_NAME% ${acrLoginServer}/%IMAGE_NAME%
-
-                echo Pushing Image to ACR...
-                docker push ${acrLoginServer}/%IMAGE_NAME%
-                """
-            }
-        }
-    }
-
-
-        stage('Deploy to AKS') {
-            steps {
-                bat """
-                echo Getting AKS Credentials...
-                az aks get-credentials --resource-group %RESOURCE_GROUP% --name %CLUSTER_NAME% --overwrite-existing
-
-                echo Applying Kubernetes Deployment...
-                kubectl apply -f deployment.yaml
-                """
-            }
-        }
-    }
-}
-
-
 // pipeline {
 //     agent any
 
 //     environment {
-//         ACR_NAME = 'myacrnamemuskan'
-//         AZURE_CREDENTIALS_ID = 'azure-service-principal-1'
-//         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"
-//         IMAGE_NAME = 'mywebapi'
-//         IMAGE_TAG = 'latest'
-//         RESOURCE_GROUP = 'myResourceGroup'
-//         AKS_CLUSTER = 'myAKSCluster'
-//         TF_WORKING_DIR = 'terraform'
-//         TERRAFORM_PATH = '"C:\\Users\\ASUS\\Downloads\\terraform_1.11.3_windows_amd64\\terraform.exe"'
+//         ACR_NAME = "myacrnamemuskan"
+//         IMAGE_NAME = "mywebapi"
+//         RESOURCE_GROUP = "myResourceGroup"
+//         CLUSTER_NAME = "myAKSCluster"
 //     }
 
 //     stages {
-//         stage('Clean Workspace') {
-//     steps {
-//         cleanWs()
-//     }
-// }
-//         stage('Checkout') {
+//         stage('Terraform - Provision Infrastructure') {
 //             steps {
-//                 git branch: 'main', url: 'https://github.com/MuskanFalwaria/aks-tf-jenkins.git'
-//             }
-//         }
-//         stage('Build .NET Web API') {
-//             steps {
-//                 bat 'dotnet publish ApiContainer/ApiContainer.csproj -c Release -o out'
-//             }
-//         }
-
-//         stage('Build Docker Image') {
-//             steps {
-//                 bat 'docker build --pull --progress=plain -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile .'
-//             }
-//         }
-
-//         stage('Terraform Init') {
-//             steps {
-//                 bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% init'
-//             }
-//         }
-
-//         stage('Terraform Plan') {
-//             steps {
-//                 withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
-//                     bat """
-//                         cd %TF_WORKING_DIR%
-//                         terraform plan -out=tfplan
-//                     """
-//                 }
-//             }
-//         }
-
-//         stage('Terraform Apply') {
-//             steps {
-//                 withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
-//                     bat """
-//                         cd %TF_WORKING_DIR%
-//                         terraform apply -auto-approve tfplan
-//                     """
+//                 dir('terraform') {
+//                     bat 'terraform init'
+//                     bat 'terraform apply -auto-approve'
 //                 }
 //             }
 //         }
 
 //         stage('Login to ACR') {
 //             steps {
-//                 bat "az acr login --name %ACR_NAME%"
+//                 bat """
+//                 echo Logging in to ACR: %ACR_NAME%
+//                 az acr login --name %ACR_NAME%
+//                 """
 //             }
 //         }
 
-//         stage('Push Docker Image to ACR') {
-//             steps {
-//                 bat "docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG%"
-//             }
-//         }
+//         stage('Docker Build & Push') {
+//         steps {
+//             script {
+//                 def acrLoginServer = "${env.ACR_NAME}.azurecr.io"
+//                 bat """
+//                 echo Building Docker Image...
+//                 docker build -t %IMAGE_NAME% -f mywebapi/Dockerfile .
 
-//         stage('Get AKS Credentials') {
-//             steps {
-//                 bat "az aks get-credentials --resource-group %RESOURCE_GROUP% --name %AKS_CLUSTER% --overwrite-existing"
+//                 echo Tagging Image...
+//                 docker tag %IMAGE_NAME% ${acrLoginServer}/%IMAGE_NAME%
+
+//                 echo Pushing Image to ACR...
+//                 docker push ${acrLoginServer}/%IMAGE_NAME%
+//                 """
 //             }
 //         }
+//     }
+
 
 //         stage('Deploy to AKS') {
 //             steps {
-//                 bat "kubectl apply -f ApiContainer/deployment.yaml"
+//                 bat """
+//                 echo Getting AKS Credentials...
+//                 az aks get-credentials --resource-group %RESOURCE_GROUP% --name %CLUSTER_NAME% --overwrite-existing
+
+//                 echo Applying Kubernetes Deployment...
+//                 kubectl apply -f deployment.yaml
+//                 """
 //             }
 //         }
 //     }
-
-//     post {
-//         success {
-//             echo '✅ Deployment completed successfully!'
-//         }
-//         failure {
-//             echo '❌ Deployment failed. Check the logs.'
-//         }
-//     }
 // }
+
+
+pipeline {
+    agent any
+
+    environment {
+        ACR_NAME = 'myacrnamemuskan'
+        AZURE_CREDENTIALS_ID = 'azure-service-principal-1'
+        ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"
+        IMAGE_NAME = 'mywebapi'
+        IMAGE_TAG = 'latest'
+        RESOURCE_GROUP = 'myResourceGroup'
+        AKS_CLUSTER = 'myAKSCluster'
+        TF_WORKING_DIR = 'terraform'
+        TERRAFORM_PATH = '"C:\\Users\\ASUS\\Downloads\\terraform_1.11.3_windows_amd64\\terraform.exe"'
+    }
+
+    stages {
+        stage('Clean Workspace') {
+    steps {
+        cleanWs()
+    }
+}
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/MuskanFalwaria/aks-tf-jenkins.git'
+            }
+        }
+        stage('Build .NET Web API') {
+            steps {
+                bat 'dotnet publish ApiContainer/ApiContainer.csproj -c Release -o out'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build --pull --progress=plain -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG% -f ApiContainer/Dockerfile .'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% init'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
+                    bat """
+                        cd %TF_WORKING_DIR%
+                        terraform plan -out=tfplan
+                    """
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
+                    bat """
+                        cd %TF_WORKING_DIR%
+                        terraform apply -auto-approve tfplan
+                    """
+                }
+            }
+        }
+
+        stage('Login to ACR') {
+            steps {
+                bat "az acr login --name %ACR_NAME%"
+            }
+        }
+
+        stage('Push Docker Image to ACR') {
+            steps {
+                bat "docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG%"
+            }
+        }
+
+        stage('Get AKS Credentials') {
+            steps {
+                bat "az aks get-credentials --resource-group %RESOURCE_GROUP% --name %AKS_CLUSTER% --overwrite-existing"
+            }
+        }
+
+        stage('Deploy to AKS') {
+            steps {
+                bat "kubectl apply -f ApiContainer/deployment.yaml"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment completed successfully!'
+        }
+        failure {
+            echo '❌ Deployment failed. Check the logs.'
+        }
+    }
+}
 
 
 // pipeline {
