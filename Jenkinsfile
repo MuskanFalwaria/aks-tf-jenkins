@@ -63,6 +63,17 @@ pipeline {
             }
         }
 
+        stage('Import Existing Resource Group') {
+            steps {
+                withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
+                    bat """
+                    cd %TF_WORKING_DIR%
+                    "%TERRAFORM_PATH%" import azurerm_resource_group.rg /subscriptions/%AZ_SUBSCRIPTION_ID%/resourceGroups/%RESOURCE_GROUP%
+                    """
+                }
+            }
+        }
+
         stage('Terraform Plan') {
             steps {
                 withCredentials([azureServicePrincipal(credentialsId: AZURE_CREDENTIALS_ID)]) {
