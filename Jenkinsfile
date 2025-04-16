@@ -64,19 +64,19 @@ pipeline {
             }
         }
 
-        stage('Import Resource Group') {
-            steps {
-                withCredentials([azureServicePrincipal(
-                    credentialsId: "${AZURE_CREDENTIALS_ID}",
-                    subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID'
-                )]) {
-                    bat """
-                        cd %TF_WORKING_DIR%
-                        "%TERRAFORM_PATH%" import azurerm_resource_group.rg /subscriptions/%AZ_SUBSCRIPTION_ID%/resourceGroups/%RESOURCE_GROUP%
-                    """
-                }
-            }
-        }
+        // stage('Import Resource Group') {
+        //     steps {
+        //         withCredentials([azureServicePrincipal(
+        //             credentialsId: "${AZURE_CREDENTIALS_ID}",
+        //             subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID'
+        //         )]) {
+        //             bat """
+        //                 cd %TF_WORKING_DIR%
+        //                 "%TERRAFORM_PATH%" import azurerm_resource_group.rg /subscriptions/%AZ_SUBSCRIPTION_ID%/resourceGroups/%RESOURCE_GROUP%
+        //             """
+        //         }
+        //     }
+        // }
 
         stage('Terraform Plan') {
             steps {
