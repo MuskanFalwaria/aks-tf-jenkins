@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        ACR_NAME = 'myacrnamemuskan'
+        ACR_NAME = 'myacrregistrymuskan'
         AZURE_CREDENTIALS_ID = 'azure-service-principal-2'
         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"
         IMAGE_NAME = 'mywebapi'
