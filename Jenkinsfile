@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        ACR_NAME = ""myacrnamemuskan
+        ACR_NAME = "myacrnamemuskan"
         IMAGE_NAME = "mywebapi"
         RESOURCE_GROUP = "myResourceGroup"
         CLUSTER_NAME = "myAKSCluster"
