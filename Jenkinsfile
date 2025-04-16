@@ -56,61 +56,109 @@ pipeline {
         }
 
         stage('Terraform Init') {
-            steps {
-                bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% init'
-            }
-        }
+           steps {
+                bat '"%TERRAFORM_PATH%" -chdir=terraform init '
+          }
+    }
+      stage('Terraform Plan & Apply') {
+           steps {
+               
+               bat '"%TERRAFORM_PATH%" -chdir=terraform plan -out=tfplan'
+               bat '"%TERRAFORM_PATH%" -chdir=terraform apply -auto-approve tfplan'
+           }
+     }
 
-        stage('Terraform Plan') {
-            steps {
-                withCredentials([azureServicePrincipal(credentialsId: "${AZURE_CREDENTIALS_ID}")]) {
-                    bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% plan -out=tfplan'
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                withCredentials([azureServicePrincipal(credentialsId: "${AZURE_CREDENTIALS_ID}")]) {
-                    bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% apply -auto-approve tfplan'
-                }
-            }
-        }
-
+        
         stage('Login to ACR') {
             steps {
-                bat 'az acr login --name %ACR_NAME%'
+                bat "az acr login --name %ACR_NAME%"
             }
         }
 
         stage('Push Docker Image to ACR') {
             steps {
-                bat 'docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG%'
+                bat "docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG%"
             }
         }
 
         stage('Get AKS Credentials') {
             steps {
-                bat 'az aks get-credentials --resource-group %RESOURCE_GROUP% --name %AKS_CLUSTER% --overwrite-existing'
+                bat "az aks get-credentials --resource-group %RESOURCE_GROUP% --name %AKS_CLUSTER% --overwrite-existing"
             }
         }
 
         stage('Deploy to AKS') {
             steps {
-                bat 'kubectl apply -f ApiContainer/deployment.yaml'
+                bat "kubectl apply -f ApiContainer/deployment.yaml"
             }
         }
     }
 
     post {
         success {
-            echo '✅ Deployment completed successfully!'
+            echo 'All stages completed successfully!'
         }
         failure {
-            echo '❌ Deployment failed. Check the logs.'
+            echo 'Build failed.'
         }
     }
 }
+//         stage('Terraform Init') {
+//             steps {
+//                 bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% init'
+//             }
+//         }
+
+//         stage('Terraform Plan') {
+//             steps {
+//                 withCredentials([azureServicePrincipal(credentialsId: "${AZURE_CREDENTIALS_ID}")]) {
+//                     bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% plan -out=tfplan'
+//                 }
+//             }
+//         }
+
+//         stage('Terraform Apply') {
+//             steps {
+//                 withCredentials([azureServicePrincipal(credentialsId: "${AZURE_CREDENTIALS_ID}")]) {
+//                     bat '"%TERRAFORM_PATH%" -chdir=%TF_WORKING_DIR% apply -auto-approve tfplan'
+//                 }
+//             }
+//         }
+
+//         stage('Login to ACR') {
+//             steps {
+//                 bat 'az acr login --name %ACR_NAME%'
+//             }
+//         }
+
+//         stage('Push Docker Image to ACR') {
+//             steps {
+//                 bat 'docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%IMAGE_TAG%'
+//             }
+//         }
+
+//         stage('Get AKS Credentials') {
+//             steps {
+//                 bat 'az aks get-credentials --resource-group %RESOURCE_GROUP% --name %AKS_CLUSTER% --overwrite-existing'
+//             }
+//         }
+
+//         stage('Deploy to AKS') {
+//             steps {
+//                 bat 'kubectl apply -f ApiContainer/deployment.yaml'
+//             }
+//         }
+//     }
+
+//     post {
+//         success {
+//             echo '✅ Deployment completed successfully!'
+//         }
+//         failure {
+//             echo '❌ Deployment failed. Check the logs.'
+//         }
+//     }
+// }
 
 
 // pipeline {
