@@ -24,22 +24,22 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/MuskanFalwaria/aks-tf-jenkins.git'
             }
         }
-            stage('Azure Login') {
-            steps {
-                withCredentials([azureServicePrincipal(
-                    credentialsId: "${AZURE_CREDENTIALS_ID}",
-                    subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID',
-                    clientIdVariable: 'AZ_CLIENT_ID',
-                    clientSecretVariable: 'AZ_CLIENT_SECRET',
-                    tenantIdVariable: 'AZ_TENANT_ID'
-                )]) {
-                    bat '''
-                        az login --service-principal -u %AZ_CLIENT_ID% -p %AZ_CLIENT_SECRET% --tenant %AZ_TENANT_ID%
-                        az account set --subscription %AZ_SUBSCRIPTION_ID%
-                    '''
-                }
-            }
-        }
+        //     stage('Azure Login') {
+        //     steps {
+        //         withCredentials([azureServicePrincipal(
+        //             credentialsId: "${AZURE_CREDENTIALS_ID}",
+        //             subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID',
+        //             clientIdVariable: 'AZ_CLIENT_ID',
+        //             clientSecretVariable: 'AZ_CLIENT_SECRET',
+        //             tenantIdVariable: 'AZ_TENANT_ID'
+        //         )]) {
+        //             bat '''
+        //                 az login --service-principal -u %AZ_CLIENT_ID% -p %AZ_CLIENT_SECRET% --tenant %AZ_TENANT_ID%
+        //                 az account set --subscription %AZ_SUBSCRIPTION_ID%
+        //             '''
+        //         }
+        //     }
+        // }
         stage('Build .NET Web API') {
             steps {
                 bat 'dotnet publish ApiContainer/ApiContainer.csproj -c Release -o out'
