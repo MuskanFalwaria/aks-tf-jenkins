@@ -7,7 +7,7 @@ pipeline {
         ACR_LOGIN_SERVER = "${ACR_NAME}.azurecr.io"
         IMAGE_NAME = 'mywebapi'
         IMAGE_TAG = 'latest'
-        AZURE_CREDENTIALS_ID = 'azure-service-principal-1'
+        // AZURE_CREDENTIALS_ID = 'azure-service-principal-1'
         RESOURCE_GROUP = 'myResourceGroup'
         AKS_CLUSTER = 'myAKSCluster'
         TF_WORKING_DIR = 'terraform'
